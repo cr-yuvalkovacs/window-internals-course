@@ -1,0 +1,71 @@
+;
+; WppDriver.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318}
+Provider="Test Provider"
+DriverVer=
+CatalogFile=WppDriver.cat
+PnpLockdown=1
+
+
+[DestinationDirs]
+DefaultDestDir      = 12 ; dirid = \Drivers on WinNT platforms
+WppDriver.DriverFiles   = 12
+
+;
+; Default install sections
+;
+
+[DefaultInstall]
+OptionDesc          = %ServiceDescription%
+CopyFiles           = WppDriver.DriverFiles
+
+[DefaultInstall.Services]
+AddService          = %ServiceName%,SPSVCINST_TAGTOFRONT,WppDriver.Service
+
+;
+; Default uninstall sections
+;
+
+[DefaultUninstall]
+DelFiles            = WppDriver.DriverFiles
+
+[DefaultUninstall.Services]
+DelService = %ServiceName%,SPSVCINST_STOPSERVICE      ;Ensure service is stopped before deleting
+
+;
+; Custom Sections
+;
+[WppDriver.DriverFiles]
+WppDriver.sys
+
+[SourceDisksFiles]
+WppDriver.sys           = 1
+;
+; Services Section
+;
+
+[WppDriver.Service]
+DisplayName         = %ServiceName%
+Description         = %ServiceDescription%
+ServiceBinary       = %12%\%DriverName%.sys        ;%windir%\system32\drivers\WppDriver.sys
+ServiceType         = 1 ; SERVICE_KERNEL_DRIVER
+StartType           = 1 ; SERVICE_AUTO_START
+ErrorControl        = 1 ; SERVICE_ERROR_NORMAL
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+
+
+[Strings]
+ServiceDescription  = "WppDriver service"
+ServiceName         = "WppDriver"
+DriverName          = "WppDriver"
+DiskName            = "WppDriver disk name"
+
+
