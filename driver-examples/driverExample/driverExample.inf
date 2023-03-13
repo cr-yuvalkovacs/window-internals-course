@@ -1,0 +1,71 @@
+;
+; DriverExample.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318}
+Provider="Test Provider"
+DriverVer=
+CatalogFile=DriverExample.cat
+PnpLockdown=1
+
+
+[DestinationDirs]
+DefaultDestDir      = 12 ; dirid = \Drivers on WinNT platforms
+DriverExample.DriverFiles   = 12
+
+;
+; Default install sections
+;
+
+[DefaultInstall]
+OptionDesc          = %ServiceDescription%
+CopyFiles           = DriverExample.DriverFiles
+
+[DefaultInstall.Services]
+AddService          = %ServiceName%,SPSVCINST_TAGTOFRONT,DriverExample.Service
+
+;
+; Default uninstall sections
+;
+
+[DefaultUninstall]
+DelFiles            = DriverExample.DriverFiles
+
+[DefaultUninstall.Services]
+DelService = %ServiceName%,SPSVCINST_STOPSERVICE      ;Ensure service is stopped before deleting
+
+;
+; Custom Sections
+;
+[DriverExample.DriverFiles]
+DriverExample.sys
+
+[SourceDisksFiles]
+DriverExample.sys           = 1
+;
+; Services Section
+;
+
+[DriverExample.Service]
+DisplayName         = %ServiceName%
+Description         = %ServiceDescription%
+ServiceBinary       = %12%\%DriverName%.sys        ;%windir%\system32\drivers\DriverExample.sys
+ServiceType         = 1 ; SERVICE_KERNEL_DRIVER
+StartType           = 1 ; SERVICE_AUTO_START
+ErrorControl        = 1 ; SERVICE_ERROR_NORMAL
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+
+
+[Strings]
+ServiceDescription  = "DriverExample service"
+ServiceName         = "DriverExample"
+DriverName          = "DriverExample"
+DiskName            = "DriverExample disk name"
+
+
